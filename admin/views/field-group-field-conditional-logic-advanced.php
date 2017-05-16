@@ -14,7 +14,11 @@ if( empty($groups) ) {
 		array(
 
 			// rule 0
-			array()
+			array(
+                'param'		=>	'post_template',
+                'operator'	=>	'==',
+                'value'		=>	'default',
+            )
 
 		)
 
@@ -23,7 +27,7 @@ if( empty($groups) ) {
 }
 
 // vars
-$rule_types = apply_filters('acf/location/rule_types', array(
+$rule_types = apply_filters('acf/conditional_logic_advanced/rule_types', array(
 	__("Post",'acf') => array(
 		'post_template'	=>	__("Post Template",'acf'),
 		'post_format'	=>	__("Post Format",'acf'),
@@ -39,7 +43,7 @@ if( acf_version_compare('wp', '<', '4.7') ) {
 
 }
 
-$rule_operators = apply_filters( 'acf/location/rule_operators', array(
+$rule_operators = apply_filters( 'acf/conditional_logic_advanced/rule_operators', array(
 	'=='	=>	__("is equal to",'acf'),
 	'!='	=>	__("is not equal to",'acf'),
 ));
@@ -58,7 +62,7 @@ $rule_operators = apply_filters( 'acf/location/rule_operators', array(
 			'prefix'		=> $field['prefix'],
 			'value'			=> $disabled ? 0 : 1,
 			'ui'			=> 1,
-			'class'			=> 'conditional_logic_advanced-toggle',
+			'class'			=> 'conditional-logic-advanced-toggle',
 		));
 
 		?>
@@ -109,7 +113,7 @@ $rule_operators = apply_filters( 'acf/location/rule_operators', array(
 										'type'		=> 'select',
 										'prefix'	=> $prefix,
 										'name'		=> 'param',
-										'value'		=> $rule['field'],
+										'value'		=> $rule['param'],
 										'choices'	=> $rule_types,
 										'class'		=> 'conditional-logic-advanced-rule-param',
 										'disabled'	=> $disabled,
@@ -132,25 +136,15 @@ $rule_operators = apply_filters( 'acf/location/rule_operators', array(
 								?></td>
 								<td class="value"><?php
 
-								$acfAdminFieldGroupReflection = new \ReflectionClass('acf_admin_field_group');
-								$acfAdminFieldGroup = $acfAdminFieldGroupReflection->newInstanceWithoutConstructor();
-
-								$acfAdminFieldGroup->render_location_value(array(
+                                $this->acfAdminFieldGroupdConditionalLogicAdvanced->render_conditional_logic_advanced_value(array(
+									'field_id'  => $field['ID'],
 									'group_id'	=> $group_id,
 									'rule_id'	=> $rule_id,
 									'value'		=> $rule['value'],
 									'param'		=> $rule['param'],
-									'class'		=> 'conditional-logic-advanced-rule-value'
+									'class'		=> 'conditional-logic-advanced-rule-value',
+                                    'disabled'	=> $disabled,
 								));
-/*
-									$this->render_location_value(array(
-										'group_id'	=> $group_id,
-										'rule_id'	=> $rule_id,
-										'value'		=> $rule['value'],
-										'param'		=> $rule['param'],
-										'class'		=> 'conditional-logic-advanced-rule-value'
-									));
-*/
 								?></td>
 								<td class="add">
 									<a href="#" class="button add-conditional-logic-advanced-rule"><?php _e("and",'acf'); ?></a>
