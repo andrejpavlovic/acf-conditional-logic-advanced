@@ -5,6 +5,11 @@ class AcfConditionalLogicAdvanced {
 
     function __construct(array $settings) {
         $this->settings = $settings;
+
+        // admin
+		if( is_admin() ) {
+            require $this->settings['path'] . 'admin/field-group.php';
+		}
     }
 
     function initialize() {
