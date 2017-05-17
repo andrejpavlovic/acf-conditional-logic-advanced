@@ -55,7 +55,7 @@ class acf_admin_field_group_conditional_logic_advanced {
 			'rule_id'	=> 0,
 			'value'		=> null,
 			'param'		=> null,
-            'disabled'  => false,
+            'disabled'  => false
 		));
 		
 		

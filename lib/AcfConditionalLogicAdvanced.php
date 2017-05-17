@@ -43,6 +43,8 @@ class AcfConditionalLogicAdvanced {
 
             return $field;
         });
+
+        add_action('acf/render_field', [$this, 'acf_render_field']);
     }
 
     function initialize() {
@@ -56,14 +58,42 @@ class AcfConditionalLogicAdvanced {
         require $this->settings['path'] . 'admin/views/field-group-field-conditional-logic-advanced.php';
     }
 
+    function acf_render_field($field) {
+        if (empty($field['conditional_logic_advanced'])) return;
+
+        $groups = $field['conditional_logic_advanced'];
+
+        // convert taxonomy term from slug to id
+        foreach($groups as $groupId => $group) {
+            foreach ($group as $ruleId => $rule) {
+                if ($rule['param'] != 'post_taxonomy') continue;
+                $param = explode(':', $rule['value']);
+
+                $taxonomyTerm = get_term_by('slug', $param[1], $param[0]);
+
+                $groups[$groupId][$ruleId]['value'] = $taxonomyTerm->term_id;
+            }
+        }
+        ?>
+            <script type="text/javascript">
+                if(typeof acf !== 'undefined'){ acf.conditional_logic_advanced.add( '<?php echo $field['key']; ?>', <?php echo json_encode($groups); ?>); }
+            </script>
+        <?php
+    }
+
     function register_assets() {
         // scripts
         wp_register_script('acf-input-conditional-logic-advanced', $this->settings['url'] . 'assets/js/acf-input.js', array('acf-input') );
         wp_register_script('acf-field-group-conditional-logic-advanced', $this->settings['url'] . 'assets/js/acf-field-group.js', array('acf-field-group', 'acf-input-conditional-logic-advanced') );
+
+        // styles
+        wp_register_style('acf-input-conditional-logic-advanced', $this->settings['url'] . 'assets/css/acf-input.css', array('acf-input') );
     }
 
     function admin_enqueue_scripts() {
         wp_enqueue_script('acf-input-conditional-logic-advanced');
         wp_enqueue_script('acf-field-group-conditional-logic-advanced');
+
+        wp_enqueue_style('acf-input-conditional-logic-advanced');
     }
 }

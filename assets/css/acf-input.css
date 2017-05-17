@@ -1,0 +1,16 @@
+/*--------------------------------------------------------------------------
+*
+*	Conditional Logic Advanced
+*
+*-------------------------------------------------------------------------*/
+/* Hide */
+.hidden-by-conditional-logic-advanced {
+    display: none !important;
+}
+/* Hide (appear empty) */
+.hidden-by-conditional-logic-advanced.appear-empty {
+    display: table-cell !important;
+}
+.hidden-by-conditional-logic-advanced.appear-empty .acf-input {
+    display: none !important;
+}
