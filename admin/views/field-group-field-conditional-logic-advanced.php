@@ -31,7 +31,7 @@ $rule_types = apply_filters('acf/conditional_logic_advanced/rule_types', array(
 	__("Post",'acf') => array(
 		'post_template'	=>	__("Post Template",'acf'),
 		'post_format'	=>	__("Post Format",'acf'),
-		'post_taxonomy'	=>	__("Post Taxonomy",'acf'),
+        'post_category'	=>	__("Post Category",'acf'),
 	),
 ));
 

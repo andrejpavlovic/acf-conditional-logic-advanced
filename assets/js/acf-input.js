@@ -473,7 +473,7 @@
                     match = this.o['page_template'] == rule['value'];
                     break;
 
-                case 'post_taxonomy':
+                case 'post_category':
                     match = this.o['post_taxonomy'].indexOf(rule['value']) > -1;
                     break;
 

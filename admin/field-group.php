@@ -99,9 +99,9 @@ class acf_admin_field_group_conditional_logic_advanced {
 				break;
 			
 			
-			case "post_taxonomy" :
+			case "post_category" :
 				
-				$choices = acf_get_taxonomy_terms();
+				$choices = acf_get_taxonomy_terms('category');
 				
 				// unset post_format
 				if( isset($choices['post_format']) ) {
