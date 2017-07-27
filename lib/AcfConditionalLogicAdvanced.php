@@ -69,6 +69,8 @@ class AcfConditionalLogicAdvanced {
         // convert taxonomy term from slug to id
         foreach($groups as $groupId => $group) {
             foreach ($group as $ruleId => $rule) {
+                if (!empty($rule['field'])) continue;
+                
                 if ($rule['param'] != 'post_category') continue;
                 $param = explode(':', $rule['value']);
 

@@ -13,6 +13,9 @@
             'change #post-formats-select input':					'_change_format',
             'change .categorychecklist input':						'_change_term',
             'change .categorychecklist select':						'_change_term',
+			'change .acf-field input': 	                            'change',
+			'change .acf-field textarea': 	                        'change',
+			'change .acf-field select':                          	'change'
         },
         o: {
             //'page_template':	0,
@@ -54,7 +57,7 @@
 
                     // vars
                     var rule = group[k],
-                        trigger = rule.param,
+                        trigger = (rule.param) ? rule.param : rule.field,
                         triggers = this.triggers[ trigger ] || {};
 
 
@@ -241,6 +244,65 @@
 
             this.refresh();
         },
+
+		/*
+		*  change
+		*
+		*  This function is called when an input is changed and will render any fields which are considered targets of this trigger
+		*
+		*  @type	function
+		*  @date	22/05/2015
+		*  @since	5.2.3
+		*
+		*  @param	$post_id (int)
+		*  @return	$post_id (int)
+		*/
+
+		change: function( e ){
+
+			// debug
+			//console.log( 'conditional_logic.change(%o)', $input );
+
+
+			// vars
+			var $input = e.$el,
+				$field = acf.get_field_wrap( $input ),
+				key = $field.data('key');
+
+
+			// bail early if this field does not trigger any actions
+			if( typeof this.triggers[key] === 'undefined' ) {
+
+				return false;
+
+			}
+
+
+			// vars
+			$parent = $field.parent();
+
+
+			// update visibility
+			for( var i in this.triggers[ key ] ) {
+
+				// get the target key
+				var target_key = this.triggers[ key ][ i ];
+
+
+				// get targets
+				var $targets = acf.get_fields(target_key, $parent, true);
+
+
+				// render
+				this.render_fields( $targets );
+
+			}
+
+
+			// action for 3rd party customization
+			//acf.do_action('refresh', $parent);
+
+		},
 
         refresh: function() {
             // get targets
@@ -447,6 +509,69 @@
         },
 
 
+		/*
+		*  get_trigger
+		*
+		*  This function will return the relevant $trigger for a $target
+		*
+		*  @type	function
+		*  @date	22/05/2015
+		*  @since	5.2.3
+		*
+		*  @param	$post_id (int)
+		*  @return	$post_id (int)
+		*/
+
+		get_trigger: function( $target, key ){
+
+			// vars
+			var selector = acf.get_selector( key );
+
+
+			// find sibling $trigger
+			var $trigger = $target.siblings( selector );
+
+
+			// parent trigger
+			if( !$trigger.exists() ) {
+
+				// vars
+				var parent = acf.get_selector();
+
+
+				// loop through parent fields and review their siblings too
+				$target.parents( parent ).each(function(){
+
+					// find sibling $trigger
+					$trigger = $(this).siblings( selector );
+
+
+					// bail early if $trigger is found
+					if( $trigger.exists() ) {
+
+						return false;
+
+					}
+
+				});
+
+			}
+
+
+			// bail early if no $trigger is found
+			if( !$trigger.exists() ) {
+
+				return false;
+
+			}
+
+
+			// return
+			return $trigger;
+
+		},
+
+
         /*
          *  calculate
          *
@@ -482,7 +607,24 @@
                     break;
 
                 default:
-                    console.error('Unknown rule param: ' + rule['param']);
+                    if (rule['field']) {
+                        var $trigger = this.get_trigger( $target, rule.field ),
+                            type = $trigger.data('type');
+
+                        // input with :checked
+                        if( type == 'true_false' || type == 'checkbox' || type == 'radio' ) {
+
+                            match = this.calculate_checkbox( rule, $trigger );
+
+
+                        } else if( type == 'select' ) {
+
+                            match = this.calculate_select( rule, $trigger );
+
+                        }
+                    } else {
+                        console.error('Unknown rule param: ' + rule['param']);
+                    }
                     break;
             }
 
@@ -497,7 +639,59 @@
             // return
             return match;
 
-        }
+        },
+
+		calculate_checkbox: function( rule, $trigger ){
+
+			// look for selected input
+			var match = $trigger.find('input[value="' + rule.value + '"]:checked').exists();
+
+
+			// override for "allow null"
+			if( rule.value === '' && !$trigger.find('input:checked').exists() ) {
+
+				match = true;
+
+			}
+
+
+			// return
+			return match;
+
+		},
+
+
+		calculate_select: function( rule, $trigger ){
+
+			// vars
+			var $select = $trigger.find('select'),
+				val = $select.val();
+
+
+			// check for no value
+			if( !val && !$.isNumeric(val) ) {
+
+				val = '';
+
+			}
+
+
+			// convert to array
+			if( !$.isArray(val) ) {
+
+				val = [ val ];
+
+			}
+
+
+			// calc
+			match = ($.inArray(rule.value, val) > -1);
+
+
+			// return
+			return match;
+
+		}
     });
 
 })(jQuery);
