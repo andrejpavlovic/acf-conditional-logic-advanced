@@ -1,10 +1,13 @@
 <?php
 /*
 Plugin Name: ACF Conditional Logic Advanced
+Plugin URI: https://github.com/andrejpavlovic/acf-conditional-logic-advanced
 Description: Add an advanced conditional logic option that can show/hide individual fields based on taxonomy, post format, etc.
-Version: 0.0.1
-Author: All Boats Rise Inc.
-Author URI: https://allboatsrise.com
+Version: 1.0.0
+Author: Andrej Pavlovic
+Author URI: https://www.pokret.org/
+License: GPL2
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
 if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
