@@ -1,5 +1,5 @@
 {
-	"name":        "andrejpavlovic",
+	"name":        "andrejpavlovic/acf-conditional-logic-advanced",
 	"description": "Adds an Advanced Conditional Logic field setting to ACF that can show/hide individual fields based on post template, format, and/or category.",
 	"version":     "1.0.1",
 	"type":        "wordpress-plugin",
