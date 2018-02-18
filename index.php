@@ -2,7 +2,7 @@
 /*
 Plugin Name: ACF Conditional Logic Advanced
 Plugin URI: https://github.com/andrejpavlovic/acf-conditional-logic-advanced
-Description: Add an advanced conditional logic option that can show/hide individual fields based on taxonomy, post format, etc.
+Description: Adds an advanced conditional logic field setting to ACF that can show/hide individual fields based on post template, format, and/or category.
 Version: 1.0.0
 Author: Andrej Pavlovic
 Author URI: https://www.pokret.org/
