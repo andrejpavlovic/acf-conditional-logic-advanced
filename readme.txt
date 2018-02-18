@@ -15,7 +15,8 @@ Adds an Advanced Conditional Logic field setting to ACF that can show/hide indiv
 
 == Screenshots ==
 
-1. Advanced Conditional Logic field setting
+1. Post Category options
+2. Advanced Conditional Logic field setting options: Template, Format, Category
 
 == Changelog ==
 
