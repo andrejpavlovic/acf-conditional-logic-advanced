@@ -20,6 +20,9 @@ Adds an Advanced Conditional Logic field setting to ACF that can show/hide indiv
 
 == Changelog ==
 
+= 1.0.3 =
+* composer.json - fixed version
+
 = 1.0.2 =
 * composer.json - fixed name
 
