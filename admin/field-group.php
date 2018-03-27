@@ -90,16 +90,19 @@ class acf_admin_field_group_conditional_logic_advanced {
 			
 			
 			case "post_category" :
+				$taxonomies = array_map(function($taxonomyName) {
+					return get_taxonomy($taxonomyName);
+				}, acf_get_taxonomies());
 				
-				$taxonomies = array_values(array_filter(get_object_taxonomies($post_type, 'objects'), function($taxonomy) {
+				$applicableTaxonomies = array_filter($taxonomies, function($taxonomy) {
 					if ($taxonomy->name == 'post_format') return;
 					if (!$taxonomy->hierarchical) return;
 					return true;
-				}));
+				});
 
 				$choices = acf_get_taxonomy_terms(array_map(function($taxonomy) {
 					return $taxonomy->name;
-				}, $taxonomies));
+				}, $applicableTaxonomies));
 							
 				break;
 		}
