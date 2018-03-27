@@ -151,7 +151,9 @@
                     $checkbox = $el.find('input[type="checkbox"]').not(':disabled'),
                     $radio = $el.find('input[type="radio"]').not(':disabled'),
                     $select = $el.find('select').not(':disabled'),
-                    $hidden = $el.find('input[type="hidden"]').not(':disabled');
+                    $hidden = $el.find('input[type="hidden"]').not(':disabled'),
+                    taxonomy = /^taxonomy-(.*)$/.exec($el.parents('.categorydiv[id^=taxonomy-]').attr('id'))[1]
+                    termIds = [];
 
 
                 // bail early if in attachment
@@ -167,7 +169,7 @@
 
                     $checkbox.filter(':checked').each(function(){
 
-                        values.push( parseInt($(this).val()) );
+                        termIds.push( parseInt($(this).val()) );
 
                     });
 
@@ -175,7 +177,7 @@
 
                     $radio.filter(':checked').each(function(){
 
-                        values.push( parseInt($(this).val()) );
+                        termIds.push( parseInt($(this).val()) );
 
                     });
 
@@ -183,7 +185,7 @@
 
                     $select.find('option:selected').each(function(){
 
-                        values.push( parseInt($(this).val()) );
+                        termIds.push( parseInt($(this).val()) );
 
                     });
 
@@ -198,12 +200,18 @@
 
                         }
 
-                        values.push( parseInt($(this).val()) );
+                        termIds.push( parseInt($(this).val()) );
 
                     });
 
                 }
 
+                termIds.forEach(function(termId) {
+                    values.push({
+                        id: termId,
+                        taxonomy: taxonomy
+                    });
+                });
             });
 
 
@@ -599,7 +607,10 @@
                     break;
 
                 case 'post_category':
-                    match = this.o['post_taxonomy'].indexOf(rule['value']) > -1;
+                    match = this.o['post_taxonomy'].some(function(value) {
+                        if (rule['value'].taxonomy != value.taxonomy) return;
+                        if (value.id && rule['value'].id == value.id) return true;
+                    });
                     break;
 
                 case 'post_format':

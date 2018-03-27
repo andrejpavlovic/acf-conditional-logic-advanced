@@ -76,7 +76,12 @@ class AcfConditionalLogicAdvanced {
 
                 $taxonomyTerm = get_term_by('slug', $param[1], $param[0]);
 
-                $groups[$groupId][$ruleId]['value'] = $taxonomyTerm->term_id;
+                $groups[$groupId][$ruleId]['value'] = array(
+                    'id' => $taxonomyTerm->term_id,
+                    'slug' => $taxonomyTerm->slug,
+                    'taxonomy' => $taxonomyTerm->taxonomy,
+                    'name' => $taxonomyTerm->name,
+                );
             }
         }
         ?>
