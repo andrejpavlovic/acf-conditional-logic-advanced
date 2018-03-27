@@ -66,27 +66,17 @@ class acf_admin_field_group_conditional_logic_advanced {
 		switch( $options['param'] ) {
 			
 			case "post_template" :
-				
+
 				// vars
-				$templates = wp_get_theme()->get_post_templates();
-				$default = apply_filters( 'default_page_template_title',  __('Default Template', 'acf') );
-				
-				
-				// choices
-				$choices = array('default' => $default);
-				
-				
-				// templates
-				if( !empty($templates) ) {
-					
-					foreach( $templates as $post_type => $post_type_templates ) {
-						
-						$choices = array_merge($choices, $post_type_templates);
-						
-					}
-					
+				$choices = array(
+					'default' => apply_filters( 'default_page_template_title',  __('Default Template', 'acf') )
+				);
+
+				// get templates (WP 4.7)
+				if( acf_version_compare('wp', '>=', '4.7') ) {
+					$templates = acf_get_post_templates();
+					$choices = array_merge($choices, $templates);
 				}
-				
 				
 				// break
 				break;
