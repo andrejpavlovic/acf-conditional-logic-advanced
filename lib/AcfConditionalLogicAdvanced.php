@@ -55,6 +55,8 @@ class AcfConditionalLogicAdvanced {
     }
 
     function render_field_settings($field) {
+        if ($field['type'] == 'clone') return;
+        
         $args = [
             'field' => $field,
         ];
