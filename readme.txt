@@ -20,6 +20,10 @@ Adds an Advanced Conditional Logic field setting to ACF that can show/hide indiv
 
 == Changelog ==
 
+= 1.1.1 =
+
+* Don't display Conditional Logic Advanced row when field type is "Clone".
+
 = 1.1.0 =
 * Added support for custom taxonomies.
 * Added support for non-hierarchical taxonomies. (e.g. Tags)
