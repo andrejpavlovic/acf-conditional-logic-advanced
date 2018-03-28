@@ -140,11 +140,12 @@
             }
 
             // vars
-            var values = [];
+            var post_taxonomy = this.o['post_taxonomy'] || [];
 
 
             // loop over term lists
             $('.categorychecklist').each(function(){
+                var values = [];
 
                 // vars
                 var $el = $(this),
@@ -206,26 +207,71 @@
 
                 }
 
-                termIds.forEach(function(termId) {
-                    values.push({
-                        id: termId,
-                        taxonomy: taxonomy
-                    });
+                // remove all entries for this taxonomy before adding
+                post_taxonomy = post_taxonomy.filter(function(value) {
+                    return value.taxonomy != taxonomy;
                 });
+
+                termIds
+                    // filter duplicates
+                    .filter(function(value, index, values) {
+                        return values.indexOf(value) === index;
+                    })
+                    // add taxonomy entries
+                    .forEach(function(termId) {
+                        post_taxonomy.push({
+                            id: termId,
+                            taxonomy: taxonomy
+                        });
+                    });
             });
 
 
-            // filter duplicates
-            values = values.filter (function (v, i, a) { return a.indexOf (v) == i });
-
-
             // update screen
-            return this.update( 'post_taxonomy', values );
+            return this.update( 'post_taxonomy', post_taxonomy );
 
         },
 
         _change_term: function() {
             this._update_term().refresh();
+        },
+
+        _change_tag: function() {
+            this._update_tag().refresh();
+        },
+
+        _update_tag: function(e) {
+            var tagDelimiter = ( window.tagsSuggestL10n && window.tagsSuggestL10n.tagDelimiter ) || ',';
+            var post_taxonomy = this.o['post_taxonomy'] || [];
+
+            $('[id^="tagsdiv-"] .jaxtag textarea')
+                .toArray()
+                .forEach(function(el) {
+                    var taxonomy = $(el).parents('.tagsdiv').attr('id'),
+                        value = $(el).val();
+                        elTags = $(el).find('button').toArray();
+                    
+                    // remove all entries for this taxonomy before adding
+                    post_taxonomy = post_taxonomy.filter(function(value) {
+                        return value.taxonomy != taxonomy;
+                    });
+
+                    value
+                        .split(tagDelimiter)
+                        .forEach(function(tagName) {
+                            tagName = $.trim(tagName);
+
+                            if (!tagName) return;
+                            
+                            post_taxonomy.push({
+                                name: tagName,
+                                taxonomy: taxonomy
+                            });
+                        });
+                })
+
+            // update screen
+            return this.update( 'post_taxonomy', post_taxonomy );
         },
 
 
@@ -246,9 +292,29 @@
             // debug
             //console.log('conditional_logic.render(%o)', $el);
 
+            // override wordpress core tag parsing, so that we can detect when tags change
+            $(document).ready(function($) {
+                var parseTagsOriginal = tagBox.parseTags,
+                    flushTagsOriginal = tagBox.flushTags;
+
+                tagBox.parseTags = function() {
+                    var result = parseTagsOriginal.apply(tagBox, arguments);
+                    this._change_tag();
+                    return result;
+                }.bind(this);
+
+                tagBox.flushTags = function() {
+                    var result = flushTagsOriginal.apply(tagBox, arguments);
+                    this._change_tag();
+                    return result;
+                }.bind(this);
+
+            }.bind(this));
+
             this._update_format();
             this._update_template();
             this._update_term();
+            this._update_tag();
 
             this.refresh();
         },
@@ -610,6 +676,7 @@
                     match = this.o['post_taxonomy'].some(function(value) {
                         if (rule['value'].taxonomy != value.taxonomy) return;
                         if (value.id && rule['value'].id == value.id) return true;
+                        if (value.name && rule['value'].name == value.name) return true;
                     });
                     break;
 

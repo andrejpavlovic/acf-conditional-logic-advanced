@@ -96,7 +96,6 @@ class acf_admin_field_group_conditional_logic_advanced {
 				
 				$applicableTaxonomies = array_filter($taxonomies, function($taxonomy) {
 					if ($taxonomy->name == 'post_format') return;
-					if (!$taxonomy->hierarchical) return;
 					return true;
 				});
 
