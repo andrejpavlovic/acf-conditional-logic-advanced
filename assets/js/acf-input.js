@@ -294,7 +294,10 @@
 
             // override wordpress core tag parsing, so that we can detect when tags change
             $(document).ready(function($) {
-                var parseTagsOriginal = tagBox.parseTags,
+                if (!window.tagBox) return;
+                
+                var tagBox = window.tagBox,
+                    parseTagsOriginal = tagBox.parseTags,
                     flushTagsOriginal = tagBox.flushTags;
 
                 tagBox.parseTags = function() {
