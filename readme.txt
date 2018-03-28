@@ -20,6 +20,11 @@ Adds an Advanced Conditional Logic field setting to ACF that can show/hide indiv
 
 == Changelog ==
 
+= 1.1.0 =
+* Added support for custom taxonomies.
+* Added support for non-hierarchical taxonomies. (e.g. Tags)
+* Reorganized the Post Template dropdown options.
+
 = 1.0.3 =
 * composer.json - fixed version
 
