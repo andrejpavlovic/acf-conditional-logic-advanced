@@ -49,7 +49,7 @@ $rule_operators = apply_filters( 'acf/conditional_logic_advanced/rule_operators'
 ));
 
 ?>
-<tr class="acf-field acf-field-true-false acf-field-setting-conditional_logic_advanced" data_type="true_false" data-name="conditional_logic_advanced">
+<tr class="acf-field acf-field-true-false acf-field-setting-conditional_logic_advanced" data-type="true_false" data-name="conditional_logic_advanced">
 	<td class="acf-label">
 		<label><?php _e("Conditional Logic Advanced",'acf'); ?></label>
 	</td>

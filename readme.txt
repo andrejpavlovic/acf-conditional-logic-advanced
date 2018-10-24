@@ -20,6 +20,10 @@ Adds an Advanced Conditional Logic field setting to ACF that can show/hide indiv
 
 == Changelog ==
 
+= 1.1.2 =
+* Small fix for Yes/No when editing Field in Field Group
+* Tested with ACF 5.7.7
+
 = 1.1.1 =
 
 * Don't display Conditional Logic Advanced row when field type is "Clone".
