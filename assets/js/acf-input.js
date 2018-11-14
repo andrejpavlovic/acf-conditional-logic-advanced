@@ -11,8 +11,8 @@
         events: {
             'change #page_template':								'_change_template',
             'change #post-formats-select input':					'_change_format',
-            'change .categorychecklist input':						'_change_term',
-            'change .categorychecklist select':						'_change_term',
+            'change #post .categorychecklist input':				'_change_term',
+            'change #post .categorychecklist select':				'_change_term',
 			'change .acf-field input': 	                            'change',
 			'change .acf-field textarea': 	                        'change',
 			'change .acf-field select':                          	'change'
@@ -133,7 +133,7 @@
 
 
             // bail early if within media popup
-            if( $('.categorychecklist input, .categorychecklist select').closest('.media-frame').exists() ) {
+            if( $('#post .categorychecklist input, #post .categorychecklist select').closest('.media-frame').exists() ) {
 
                 return;
 
@@ -144,7 +144,7 @@
 
 
             // loop over term lists
-            $('.categorychecklist').each(function(){
+            $('#post .categorychecklist').each(function(){
                 var values = [];
 
                 // vars

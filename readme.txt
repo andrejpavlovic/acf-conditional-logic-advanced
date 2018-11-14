@@ -20,6 +20,9 @@ Adds an Advanced Conditional Logic field setting to ACF that can show/hide indiv
 
 == Changelog ==
 
+= 1.1.3 =
+* Small fix to prevent acf-input category check from throwing errors when editing menus
+
 = 1.1.2 =
 * Small fix for Yes/No when editing Field in Field Group
 * Tested with ACF 5.7.7
